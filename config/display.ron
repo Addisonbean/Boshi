@@ -1,0 +1,4 @@
+(
+  title: "boshi",
+  dimensions: Some((500, 500)),
+)

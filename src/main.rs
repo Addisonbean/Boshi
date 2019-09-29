@@ -1,6 +1,6 @@
 use amethyst::{
     core::transform::TransformBundle,
-    ecs::prelude::{ReadExpect, Resources, SystemData},
+    input::StringBindings,
     prelude::*,
     renderer::{
         plugins::{RenderFlat2D, RenderToWindow},
@@ -8,12 +8,19 @@ use amethyst::{
         RenderingBundle,
     },
     utils::application_root_dir,
+    ui::{RenderUi, UiBundle},
 };
+
+mod player;
+use crate::player::{init_boshi, init_camera};
 
 struct MyState;
 
 impl SimpleState for MyState {
-    fn on_start(&mut self, _data: StateData<'_, GameData<'_, '_>>) {}
+    fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+        init_boshi(data.world);
+        init_camera(data.world);
+    }
 }
 
 fn main() -> amethyst::Result<()> {
@@ -22,6 +29,7 @@ fn main() -> amethyst::Result<()> {
     let app_root = application_root_dir()?;
 
     let config_dir = app_root.join("config");
+    let assets_dir = app_root.join("assets");
     let display_config_path = config_dir.join("display.ron");
 
     let game_data = GameDataBuilder::default()
@@ -31,11 +39,14 @@ fn main() -> amethyst::Result<()> {
                     RenderToWindow::from_config_path(display_config_path)
                         .with_clear([0.34, 0.36, 0.52, 1.0]),
                 )
-                .with_plugin(RenderFlat2D::default()),
+                .with_plugin(RenderFlat2D::default())
+                .with_plugin(RenderUi::default()),
         )?
-        .with_bundle(TransformBundle::new())?;
+        .with_bundle(TransformBundle::new())?
+        .with_bundle(UiBundle::<StringBindings>::new())?
+        ;
 
-    let mut game = Application::new("/", MyState, game_data)?;
+    let mut game = Application::new(assets_dir, MyState, game_data)?;
     game.run();
 
     Ok(())

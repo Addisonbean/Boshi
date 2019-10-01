@@ -14,6 +14,8 @@ use amethyst::{
 mod player;
 use crate::player::{init_boshi, init_camera};
 
+mod systems;
+
 struct MyState;
 
 impl SimpleState for MyState {
@@ -44,6 +46,7 @@ fn main() -> amethyst::Result<()> {
         )?
         .with_bundle(TransformBundle::new())?
         .with_bundle(UiBundle::<StringBindings>::new())?
+        .with(systems::PlayerMovementSystem, "player_movement_system", &[])
         ;
 
     let mut game = Application::new(assets_dir, MyState, game_data)?;

@@ -5,9 +5,15 @@ use amethyst::ui::{Anchor, UiImage, UiTransform};
 use amethyst::renderer::Camera;
 use amethyst::renderer::Texture;
 use amethyst::renderer::formats::texture::ImageFormat;
+use amethyst::ecs::prelude::{Component, DenseVecStorage};
 
 const GAME_WIDTH: f32 = 100.0;
 const GAME_HEIGHT: f32 = 100.0;
+
+pub struct Player;
+impl Component for Player {
+    type Storage = DenseVecStorage<Self>;
+}
 
 pub fn init_boshi(world: &mut World) {
     let sprite = {
@@ -37,6 +43,7 @@ pub fn init_boshi(world: &mut World) {
         .create_entity()
         .with(UiImage::Texture(sprite))
         .with(transform)
+        .with(Player)
         .build();
 }
 

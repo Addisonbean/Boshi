@@ -5,14 +5,19 @@ use amethyst::ui::{Anchor, UiImage, UiTransform};
 use amethyst::renderer::Camera;
 use amethyst::renderer::Texture;
 use amethyst::renderer::formats::texture::ImageFormat;
-use amethyst::ecs::prelude::{Component, DenseVecStorage};
+
+use crate::components::Player;
 
 const GAME_WIDTH: f32 = 100.0;
 const GAME_HEIGHT: f32 = 100.0;
 
-pub struct Player;
-impl Component for Player {
-    type Storage = DenseVecStorage<Self>;
+pub struct GamePlayState;
+
+impl SimpleState for GamePlayState {
+    fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+        init_boshi(data.world);
+        init_camera(data.world);
+    }
 }
 
 pub fn init_boshi(world: &mut World) {

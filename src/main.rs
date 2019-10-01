@@ -11,19 +11,8 @@ use amethyst::{
     ui::{RenderUi, UiBundle},
 };
 
-mod player;
-use crate::player::{init_boshi, init_camera};
-
-mod systems;
-
-struct MyState;
-
-impl SimpleState for MyState {
-    fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
-        init_boshi(data.world);
-        init_camera(data.world);
-    }
-}
+use boshi::systems;
+use boshi::states;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -49,7 +38,7 @@ fn main() -> amethyst::Result<()> {
         .with(systems::PlayerMovementSystem, "player_movement_system", &[])
         ;
 
-    let mut game = Application::new(assets_dir, MyState, game_data)?;
+    let mut game = Application::new(assets_dir, states::GamePlayState, game_data)?;
     game.run();
 
     Ok(())

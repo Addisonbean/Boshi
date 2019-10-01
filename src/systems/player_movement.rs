@@ -1,7 +1,7 @@
 use amethyst::ecs::prelude::*;
 use amethyst::ui::UiTransform;
 
-use crate::player::Player;
+use crate::components::Player;
 
 pub struct PlayerMovementSystem;
 
@@ -13,7 +13,7 @@ impl<'s> System<'s> for PlayerMovementSystem {
     );
     
     fn run(&mut self, (players, mut transforms): Self::SystemData) {
-        for (player, transform) in (&players, &mut transforms).join() {
+        for (_player, transform) in (&players, &mut transforms).join() {
             transform.local_x += 2.0;
             transform.local_y += 1.0;
         }
